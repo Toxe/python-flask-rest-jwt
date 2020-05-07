@@ -16,7 +16,10 @@ def list_ships():
 
 
 def find_ship(id):
-    return ships[id - 1]
+    lst = list(filter(lambda s: s["id"] == id, ships))
+    if len(lst) != 1:
+        return None
+    return lst[0]
 
 
 def remove_password(u):
