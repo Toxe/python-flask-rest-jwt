@@ -6,6 +6,7 @@
 - Flask
 - python-dotenv
 - pylint-flask
+- pytest
 
 ## Configuration
 
@@ -14,7 +15,7 @@
 #### `.flaskenv`
 
 ```ini
-FLASK_APP=main.py
+FLASK_APP=main
 FLASK_ENV=development
 ```
 
@@ -52,6 +53,18 @@ static         GET      /static/<path:filename>
 
 ```
 flask run
+```
+
+## Tests
+
+Run either of:
+
+```
+pytest
+```
+
+```
+python3 -m pytest
 ```
 
 ## Examples
