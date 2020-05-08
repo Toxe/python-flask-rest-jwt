@@ -12,7 +12,7 @@
 
 ### Flask
 
-#### `.flaskenv`
+#### `.flaskenv` for development and debugging
 
 ```ini
 FLASK_APP=main
@@ -49,7 +49,7 @@ api.get_users  GET      /api/users
 static         GET      /static/<path:filename>
 ```
 
-## Running
+## Running (development version)
 
 ```
 flask run
