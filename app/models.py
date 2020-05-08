@@ -22,17 +22,18 @@ def find_ship(id):
     return lst[0]
 
 
-def remove_password(u):
-    del u["password"]
-    return u
+def remove_password(user_orig):
+    user_new = dict(user_orig)
+    del user_new["password"]
+    return user_new
 
 
 def list_users():
-    return list(map(remove_password, deepcopy(users)))
+    return list(map(remove_password, users))
 
 
 def find_user(id):
     lst = list(filter(lambda u: u["id"] == id, users))
     if len(lst) != 1:
         return None
-    return remove_password(dict(lst[0]))
+    return remove_password(lst[0])
