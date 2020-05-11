@@ -1,4 +1,4 @@
-from app.models import Ship, list_ships, find_ship
+from app.models import Ship, list_ships, find_ship, get_next_ship_id, add_new_ship
 
 
 def test_list_ships_returns_list():
@@ -17,3 +17,31 @@ def test_find_existing_ship():
 def test_find_non_existing_ship():
     ship = find_ship(1000)
     assert ship == None
+
+
+def test_get_next_ship_id_from_populated_list():
+    ships = [
+        Ship(id=3, affiliation="", category="", crew=0, length=0, manufacturer="", model="", ship_class="", roles=[]),
+        Ship(id=7, affiliation="", category="", crew=0, length=0, manufacturer="", model="", ship_class="", roles=[]),
+    ]
+    assert get_next_ship_id(ships) == 8
+
+
+def test_get_next_ship_id_from_empty_list():
+    ships = []
+    assert get_next_ship_id(ships) == 1
+
+
+def test_add_new_ship():
+    ship = Ship(id=0, affiliation="", category="", crew=0, length=0, manufacturer="", model="", ship_class="", roles=[])
+    ship = add_new_ship(ship)
+    assert ship.id > 0
+
+
+def test_add_new_ship_with_nonzero_id():
+    ship = Ship(id=20, affiliation="", category="", crew=0, length=0, manufacturer="", model="", ship_class="", roles=[])
+    assert add_new_ship(ship) == None
+
+
+def test_add_new_ship_with_none_argument():
+    assert add_new_ship(None) == None

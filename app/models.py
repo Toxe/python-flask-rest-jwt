@@ -1,5 +1,5 @@
 from flask import json
-from marshmallow import Schema, fields, post_load, validate, ValidationError
+from marshmallow import Schema, fields, post_load, validate
 
 
 class Ship:
@@ -18,15 +18,15 @@ class Ship:
 
 
 class ShipSchema(Schema):
-    id = fields.Integer(validate=validate.Range(min=1))
-    affiliation = fields.Str()
-    category = fields.Str()
-    crew = fields.Integer(validate=validate.Range(min=1))
-    length = fields.Integer(validate=validate.Range(min=1))
-    manufacturer = fields.Str()
-    model = fields.Str()
-    ship_class = fields.Str()
-    roles = fields.List(fields.Str())
+    id = fields.Integer(validate=validate.Range(min=1), missing=0)
+    affiliation = fields.Str(required=True)
+    category = fields.Str(required=True)
+    crew = fields.Integer(required=True, validate=validate.Range(min=1))
+    length = fields.Integer(required=True, validate=validate.Range(min=1))
+    manufacturer = fields.Str(required=True)
+    model = fields.Str(required=True)
+    ship_class = fields.Str(required=True)
+    roles = fields.List(fields.Str(), required=True)
 
     @post_load
     def make_ship(self, data, **kwargs):
@@ -73,6 +73,20 @@ def find_ship(id):
     if len(lst) != 1:
         return None
     return lst[0]
+
+
+def get_next_ship_id(ships):
+    if len(ships) == 0:
+        return 1
+    return max([s.id for s in ships]) + 1
+
+
+def add_new_ship(ship):
+    if ship is None or ship.id != 0:
+        return None
+    ship.id = get_next_ship_id(ships)
+    ships.append(ship)
+    return ship
 
 
 def list_users():
