@@ -1,6 +1,6 @@
 from flask import jsonify, request, url_for
 from app.api import bp
-from app.models import list_ships, find_ship, ship_schema, add_new_ship
+from app.models import list_ships, find_ship, ship_schema, add_new_ship, replace_existing_ship
 from app.errors import error_response
 from marshmallow import ValidationError
 
@@ -30,4 +30,22 @@ def create_ship():
     response = jsonify(ship_schema.dump(ship))
     response.status_code = 201
     response.headers["Location"] = url_for("api.get_ship", id=ship.id)
+    return response
+
+
+@bp.route("/ships/<int:id>", methods=["PUT"])
+def update_ship(id):
+    try:
+        ship = ship_schema.loads(request.data)
+    except ValidationError as err:
+        return error_response(400, err.messages)
+    # "id" in request data is optional
+    if ship.id == 0:
+        ship.id = id
+    # if "id" was provided in request data then it has to match the resource id
+    if ship.id != id:
+        return error_response(400, "Request data id has to match resource id.")
+    if not replace_existing_ship(ship):
+        return error_response(400)
+    response = jsonify(ship_schema.dump(ship))
     return response

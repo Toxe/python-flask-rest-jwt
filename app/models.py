@@ -89,6 +89,16 @@ def add_new_ship(ship):
     return ship
 
 
+def replace_existing_ship(ship):
+    if ship is None or ship.id <= 0:
+        return False
+    for key, s in enumerate(ships):
+        if s.id == ship.id:
+            ships[key] = ship
+            break
+    return True
+
+
 def list_users():
     return users
 

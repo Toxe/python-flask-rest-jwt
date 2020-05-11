@@ -64,3 +64,33 @@ def test_create_ship_fails_if_data_contains_id(client):
         "id": 1, "affiliation": "Affiliation", "crew": 1, "length": 1, "model": "Model", "ship_class": "Class", "roles": ["Role1", "Role2"], "category": "Category", "manufacturer": "Manufacturer"
     })
     assert r.status_code == 400
+
+
+def test_update_ship(client):
+    r = client.put("/api/ships/5", json={
+        "id": 5, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
+    })
+    assert r.status_code == 200
+    assert r.is_json
+    ship = r.get_json()
+    assert ship["id"] == 5
+    assert ship["ship_class"] == "?"
+
+
+def test_update_ship_ensures_request_data_id_matches_resource_id(client):
+    """If request data contains an (optional) "id" then it has to match the resource id."""
+    r = client.put("/api/ships/5", json={
+        "id": 5, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
+    })
+    assert r.status_code == 200
+    r = client.put("/api/ships/5", json={
+        "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
+    })
+    assert r.status_code == 200
+    r = client.put("/api/ships/5", json={
+        "id": 7, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
+    })
+    assert r.status_code == 400
+    json = r.get_json()
+    assert "message" in json
+    assert json["message"] == "Request data id has to match resource id."
