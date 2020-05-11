@@ -4,6 +4,7 @@
 
 - Python 3
 - Flask
+- Marshmallow
 - python-dotenv
 - pylint-flask
 - pytest
