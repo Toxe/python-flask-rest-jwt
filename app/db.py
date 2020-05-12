@@ -24,8 +24,17 @@ class Database:
     def all_ships(self):
         return self.ships
 
+    def all_users(self):
+        return self.users
+
     def get_ship(self, id):
         lst = list(filter(lambda s: s.id == id, self.ships))
+        if len(lst) != 1:
+            return None
+        return lst[0]
+
+    def get_user(self, id):
+        lst = list(filter(lambda u: u.id == id, self.users))
         if len(lst) != 1:
             return None
         return lst[0]
@@ -35,6 +44,11 @@ class Database:
             return 1
         return max([s.id for s in ships]) + 1
 
+    def get_next_user_id(self, users):
+        if len(users) == 0:
+            return 1
+        return max([s.id for s in users]) + 1
+
     def add_ship(self, ship):
         if ship is None or ship.id != 0:
             return None
@@ -42,12 +56,28 @@ class Database:
         self.ships.append(ship)
         return ship
 
+    def add_user(self, user):
+        if user is None or user.id != 0:
+            return None
+        user.id = self.get_next_user_id(self.users)
+        self.users.append(user)
+        return user
+
     def update_ship(self, ship):
         if ship is None or ship.id <= 0:
             return False
         for key, s in enumerate(self.ships):
             if s.id == ship.id:
                 self.ships[key] = ship
+                break
+        return True
+
+    def update_user(self, user):
+        if user is None or user.id <= 0:
+            return False
+        for key, s in enumerate(self.users):
+            if s.id == user.id:
+                self.users[key] = user
                 break
         return True
 
@@ -60,11 +90,11 @@ class Database:
                 return True
         return False
 
-    def all_users(self):
-        return self.users
-
-    def get_user(self, id):
-        lst = list(filter(lambda u: u.id == id, self.users))
-        if len(lst) != 1:
-            return None
-        return lst[0]
+    def delete_user(self, id):
+        if id <= 0:
+            return False
+        for key, s in enumerate(self.users):
+            if s.id == id:
+                del self.users[key]
+                return True
+        return False
