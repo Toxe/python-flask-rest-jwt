@@ -40,14 +40,17 @@ Example user and ship data is stored in `data.json`.
 ## Routes
 
 ```
-$ flask routes
-Endpoint       Methods  Rule
--------------  -------  -----------------------
-api.get_ship   GET      /api/ships/<int:id>
-api.get_ships  GET      /api/ships
-api.get_user   GET      /api/users/<int:id>
-api.get_users  GET      /api/users
-static         GET      /static/<path:filename>
+$ flask routes --sort rule
+Endpoint         Methods  Rule
+---------------  -------  -----------------------
+api.get_ships    GET      /api/ships
+api.create_ship  POST     /api/ships
+api.get_ship     GET      /api/ships/<int:id>
+api.update_ship  PUT      /api/ships/<int:id>
+api.delete_ship  DELETE   /api/ships/<int:id>
+api.get_users    GET      /api/users
+api.get_user     GET      /api/users/<int:id>
+static           GET      /static/<path:filename>
 ```
 
 ## Running (development version)
