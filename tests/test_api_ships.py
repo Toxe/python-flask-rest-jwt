@@ -94,3 +94,12 @@ def test_update_ship_ensures_request_data_id_matches_resource_id(client):
     json = r.get_json()
     assert "message" in json
     assert json["message"] == "Request data id has to match resource id."
+
+
+def test_delete_ship(client):
+    assert client.delete("/api/ships/5").status_code == 204
+
+
+def test_delete_ship_that_does_not_exist(client):
+    assert client.delete("/api/ships/0").status_code == 404
+    assert client.delete("/api/ships/99").status_code == 404

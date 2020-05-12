@@ -50,3 +50,12 @@ def update_ship(id):
         return error_response(400)
     response = jsonify(ship_schema.dump(ship))
     return response
+
+
+@bp.route("/ships/<int:id>", methods=["DELETE"])
+def delete_ship(id):
+    if db.get_ship(id) is None:
+        return error_response(404)
+    if db.delete_ship(id) is False:
+        return error_response(400)
+    return "", 204

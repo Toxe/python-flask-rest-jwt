@@ -65,3 +65,17 @@ def test_update_ship_with_bad_id():
 
 def test_update_ship_with_none_argument():
     assert db.update_ship(None) == False
+
+
+def test_delete_ship():
+    ship = Ship(id=0, affiliation="?", category="?", crew=1, length=1, manufacturer="?", model="?", ship_class="?", roles=["?"])
+    ship = db.add_ship(ship)
+    assert ship.id > 0
+    assert db.delete_ship(ship.id)
+    assert db.get_ship(ship.id) == None
+
+
+def test_delete_ship_with_bad_id():
+    assert db.delete_ship(0) == False
+    assert db.delete_ship(-1) == False
+    assert db.delete_ship(99) == False

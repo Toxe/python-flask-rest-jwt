@@ -51,6 +51,15 @@ class Database:
                 break
         return True
 
+    def delete_ship(self, id):
+        if id <= 0:
+            return False
+        for key, s in enumerate(self.ships):
+            if s.id == id:
+                del self.ships[key]
+                return True
+        return False
+
     def all_users(self):
         return self.users
 
