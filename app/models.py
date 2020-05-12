@@ -42,9 +42,9 @@ class User:
 
 
 class UserSchema(Schema):
-    id = fields.Integer(validate=validate.Range(min=1))
-    name = fields.Str()
-    password = fields.Str(load_only=True)
+    id = fields.Integer(validate=validate.Range(min=1), missing=0)
+    name = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)
 
     @post_load
     def make_user(self, data, **kwargs):
