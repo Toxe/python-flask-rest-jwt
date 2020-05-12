@@ -1,4 +1,3 @@
-from flask import json
 from marshmallow import Schema, fields, post_load, validate
 
 
@@ -54,57 +53,3 @@ class UserSchema(Schema):
 
 user_schema = UserSchema()
 ship_schema = ShipSchema()
-
-users = []
-ships = []
-
-with open("data.json") as fp:
-    data = json.load(fp)
-    users = user_schema.load(data["users"], many=True)
-    ships = ship_schema.load(data["ships"], many=True)
-
-
-def list_ships():
-    return ships
-
-
-def find_ship(id):
-    lst = list(filter(lambda s: s.id == id, ships))
-    if len(lst) != 1:
-        return None
-    return lst[0]
-
-
-def get_next_ship_id(ships):
-    if len(ships) == 0:
-        return 1
-    return max([s.id for s in ships]) + 1
-
-
-def add_new_ship(ship):
-    if ship is None or ship.id != 0:
-        return None
-    ship.id = get_next_ship_id(ships)
-    ships.append(ship)
-    return ship
-
-
-def replace_existing_ship(ship):
-    if ship is None or ship.id <= 0:
-        return False
-    for key, s in enumerate(ships):
-        if s.id == ship.id:
-            ships[key] = ship
-            break
-    return True
-
-
-def list_users():
-    return users
-
-
-def find_user(id):
-    lst = list(filter(lambda u: u.id == id, users))
-    if len(lst) != 1:
-        return None
-    return lst[0]

@@ -1,18 +1,19 @@
 from flask import jsonify, request, url_for
+from app import db
 from app.api import bp
-from app.models import list_ships, find_ship, ship_schema, add_new_ship, replace_existing_ship
+from app.models import ship_schema
 from app.errors import error_response
 from marshmallow import ValidationError
 
 
 @bp.route("/ships", methods=["GET"])
 def get_ships():
-    return jsonify(ship_schema.dump(list_ships(), many=True))
+    return jsonify(ship_schema.dump(db.list_ships(), many=True))
 
 
 @bp.route("/ships/<int:id>", methods=["GET"])
 def get_ship(id):
-    ship = find_ship(id)
+    ship = db.find_ship(id)
     if ship is None:
         return error_response(404)
     return jsonify(ship_schema.dump(ship))
@@ -24,7 +25,7 @@ def create_ship():
         ship = ship_schema.loads(request.data)
     except ValidationError as err:
         return error_response(400, err.messages)
-    ship = add_new_ship(ship)
+    ship = db.add_new_ship(ship)
     if ship is None:
         return error_response(400)
     response = jsonify(ship_schema.dump(ship))
@@ -45,7 +46,7 @@ def update_ship(id):
     # if "id" was provided in request data then it has to match the resource id
     if ship.id != id:
         return error_response(400, "Request data id has to match resource id.")
-    if not replace_existing_ship(ship):
+    if not db.replace_existing_ship(ship):
         return error_response(400)
     response = jsonify(ship_schema.dump(ship))
     return response
