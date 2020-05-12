@@ -40,6 +40,8 @@ def update_ship(id):
         ship = ship_schema.loads(request.data)
     except ValidationError as err:
         return error_response(400, err.messages)
+    if db.get_ship(id) is None:
+        return error_response(404)
     # "id" in request data is optional
     if ship.id == 0:
         ship.id = id

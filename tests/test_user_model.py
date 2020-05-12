@@ -56,6 +56,11 @@ def test_update_user():
     assert userA.name == userB.name
 
 
+def test_update_non_existing_user():
+    user = User(id=5, name="?", password="?")
+    assert db.update_user(user) == False
+
+
 def test_update_user_with_bad_id():
     user1 = User(id=0, name="?", password="?")
     user2 = User(id=-1, name="?", password="?")

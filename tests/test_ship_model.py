@@ -56,6 +56,11 @@ def test_update_ship():
     assert ship1.model == ship2.model
 
 
+def test_update_non_existing_ship():
+    ship = Ship(id=99, affiliation="?", category="?", crew=1, length=1, manufacturer="?", model="?", ship_class="?", roles=["?"])
+    assert db.update_ship(ship) == False
+
+
 def test_update_ship_with_bad_id():
     ship1 = Ship(id=0, affiliation="?", category="?", crew=1, length=1, manufacturer="?", model="?", ship_class="?", roles=["?"])
     ship2 = Ship(id=-1, affiliation="?", category="?", crew=1, length=1, manufacturer="?", model="?", ship_class="?", roles=["?"])

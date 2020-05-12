@@ -75,6 +75,11 @@ def test_update_user(client):
     assert user["name"] == "new-name"
 
 
+def test_update_non_existing_user(client):
+    r = client.put("/api/users/99", json={"id": 99, "name": "?", "password": "?"})
+    assert r.status_code == 404
+
+
 def test_update_user_ensures_request_data_id_matches_resource_id(client):
     """If request data contains an (optional) "id" then it has to match the resource id."""
     r = client.put("/api/users/1", json={"id": 1, "name": "?", "password": "?"})

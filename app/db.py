@@ -69,8 +69,8 @@ class Database:
         for key, s in enumerate(self.ships):
             if s.id == ship.id:
                 self.ships[key] = ship
-                break
-        return True
+                return True
+        return False
 
     def update_user(self, user):
         if user is None or user.id <= 0:
@@ -78,8 +78,8 @@ class Database:
         for key, s in enumerate(self.users):
             if s.id == user.id:
                 self.users[key] = user
-                break
-        return True
+                return True
+        return False
 
     def delete_ship(self, id):
         if id <= 0:

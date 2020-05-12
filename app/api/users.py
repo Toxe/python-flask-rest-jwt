@@ -40,6 +40,8 @@ def update_user(id):
         user = user_schema.loads(request.data)
     except ValidationError as err:
         return error_response(400, err.messages)
+    if db.get_user(id) is None:
+        return error_response(404)
     # "id" in request data is optional
     if user.id == 0:
         user.id = id
