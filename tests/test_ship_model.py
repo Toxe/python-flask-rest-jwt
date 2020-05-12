@@ -68,11 +68,13 @@ def test_update_ship_with_none_argument():
 
 
 def test_delete_ship():
+    old_len = len(db.all_ships())
     ship = Ship(id=0, affiliation="?", category="?", crew=1, length=1, manufacturer="?", model="?", ship_class="?", roles=["?"])
     ship = db.add_ship(ship)
     assert ship.id > 0
     assert db.delete_ship(ship.id)
     assert db.get_ship(ship.id) == None
+    assert len(db.all_ships()) == old_len
 
 
 def test_delete_ship_with_bad_id():

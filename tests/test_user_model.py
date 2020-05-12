@@ -68,11 +68,13 @@ def test_update_user_with_none_argument():
 
 
 def test_delete_user():
+    old_len = len(db.all_users())
     user = User(id=0, name="?", password="?")
     user = db.add_user(user)
     assert user.id > 0
     assert db.delete_user(user.id)
     assert db.get_user(user.id) == None
+    assert len(db.all_users()) == old_len
 
 
 def test_delete_user_with_bad_id():
