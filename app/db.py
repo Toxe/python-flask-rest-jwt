@@ -21,10 +21,10 @@ class Database:
     def teardown(self, exception):
         pass
 
-    def list_ships(self):
+    def all_ships(self):
         return self.ships
 
-    def find_ship(self, id):
+    def get_ship(self, id):
         lst = list(filter(lambda s: s.id == id, self.ships))
         if len(lst) != 1:
             return None
@@ -35,14 +35,14 @@ class Database:
             return 1
         return max([s.id for s in ships]) + 1
 
-    def add_new_ship(self, ship):
+    def add_ship(self, ship):
         if ship is None or ship.id != 0:
             return None
         ship.id = self.get_next_ship_id(self.ships)
         self.ships.append(ship)
         return ship
 
-    def replace_existing_ship(self, ship):
+    def update_ship(self, ship):
         if ship is None or ship.id <= 0:
             return False
         for key, s in enumerate(self.ships):
@@ -51,10 +51,10 @@ class Database:
                 break
         return True
 
-    def list_users(self):
+    def all_users(self):
         return self.users
 
-    def find_user(self, id):
+    def get_user(self, id):
         lst = list(filter(lambda u: u.id == id, self.users))
         if len(lst) != 1:
             return None

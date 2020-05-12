@@ -7,12 +7,12 @@ from app.errors import error_response
 
 @bp.route("/users", methods=["GET"])
 def get_users():
-    return jsonify(user_schema.dump(db.list_users(), many=True))
+    return jsonify(user_schema.dump(db.all_users(), many=True))
 
 
 @bp.route("/users/<int:id>", methods=["GET"])
 def get_user(id):
-    user = db.find_user(id)
+    user = db.get_user(id)
     if user is None:
         return error_response(404)
     return jsonify(user_schema.dump(user))
