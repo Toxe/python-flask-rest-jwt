@@ -32,6 +32,12 @@ def test_create_ship(client, auth):
     assert r.headers["Location"].endswith("/api/ships/{}".format(ship["id"]))
 
 
+def test_create_ship_without_login(client):
+    assert client.post("/api/ships", json={
+        "affiliation": "Affiliation", "crew": 1, "length": 1, "model": "Model", "ship_class": "Class", "roles": ["Role1", "Role2"], "category": "Category", "manufacturer": "Manufacturer"
+    }).status_code == 401
+
+
 def test_create_ship_fails_if_data_is_missing(client, auth):
     auth.login()
     r = client.post("/api/ships", json={
@@ -82,6 +88,12 @@ def test_update_ship(client, auth):
     assert ship["ship_class"] == "?"
 
 
+def test_update_ship_without_login(client):
+    assert client.put("/api/ships/5", json={
+        "id": 5, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
+    }).status_code == 401
+
+
 def test_update_non_existing_ship(client, auth):
     auth.login()
     r = client.put("/api/ships/99", json={
@@ -113,6 +125,10 @@ def test_update_ship_ensures_request_data_id_matches_resource_id(client, auth):
 def test_delete_ship(client, auth):
     auth.login()
     assert client.delete("/api/ships/5", headers=auth.headers).status_code == 204
+
+
+def test_delete_ship_without_login(client):
+    assert client.delete("/api/ships/5").status_code == 401
 
 
 def test_delete_ship_that_does_not_exist(client, auth):

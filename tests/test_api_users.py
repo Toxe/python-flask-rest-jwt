@@ -79,6 +79,10 @@ def test_update_user(client, auth):
     assert user["name"] == "new-name"
 
 
+def test_update_user_without_login(client):
+    assert client.put("/api/users/1", json={"id": 1, "name": "new-name", "password": "new-pwd"}).status_code == 401
+
+
 def test_update_non_existing_user(client):
     r = client.put("/api/users/99", json={"id": 99, "name": "?", "password": "?"}, headers={"Authorization": "Bearer " + create_access_token(identity=99)})
     assert r.status_code == 404
@@ -99,6 +103,10 @@ def test_update_user_ensures_request_data_id_matches_resource_id(client, auth):
 def test_delete_user(client, auth):
     auth.login()
     assert client.delete("/api/users/{}".format(auth.id), headers=auth.headers).status_code == 204
+
+
+def test_delete_user_without_login(client):
+    assert client.delete("/api/users/1").status_code == 401
 
 
 def test_delete_user_that_does_not_exist(client, auth):
