@@ -1,6 +1,3 @@
-from flask_jwt_extended import create_access_token
-
-
 def test_get_ships(client):
     r = client.get("/api/ships")
     assert r.status_code == 200
@@ -21,10 +18,11 @@ def test_get_missing_ship(client):
     assert r.status_code == 404
 
 
-def test_create_ship(client):
+def test_create_ship(client, auth):
+    auth.login()
     r = client.post("/api/ships", json={
         "affiliation": "Affiliation", "crew": 1, "length": 1, "model": "Model", "ship_class": "Class", "roles": ["Role1", "Role2"], "category": "Category", "manufacturer": "Manufacturer"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 201
     assert r.is_json
     ship = r.get_json()
@@ -34,10 +32,11 @@ def test_create_ship(client):
     assert r.headers["Location"].endswith("/api/ships/{}".format(ship["id"]))
 
 
-def test_create_ship_fails_if_data_is_missing(client):
+def test_create_ship_fails_if_data_is_missing(client, auth):
+    auth.login()
     r = client.post("/api/ships", json={
         "affiliation": "Affiliation", "crew": 1, "length": 1, "model": "Model", "ship_class": "Class", "roles": ["Role1", "Role2"]
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 400
     assert r.is_json
     ship = r.get_json()
@@ -48,10 +47,11 @@ def test_create_ship_fails_if_data_is_missing(client):
     assert ship["message"]["manufacturer"][0] == "Missing data for required field."
 
 
-def test_create_ship_fails_if_data_is_of_wrong_type(client):
+def test_create_ship_fails_if_data_is_of_wrong_type(client, auth):
+    auth.login()
     r = client.post("/api/ships", json={
         "affiliation": "Affiliation", "crew": "BAD", "length": False, "model": "Model", "ship_class": "Class", "roles": ["Role1", "Role2"], "category": "Category", "manufacturer": "Manufacturer"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 400
     assert r.is_json
     ship = r.get_json()
@@ -62,17 +62,19 @@ def test_create_ship_fails_if_data_is_of_wrong_type(client):
     assert ship["message"]["length"][0] == "Not a valid integer."
 
 
-def test_create_ship_fails_if_data_contains_id(client):
+def test_create_ship_fails_if_data_contains_id(client, auth):
+    auth.login()
     r = client.post("/api/ships", json={
         "id": 1, "affiliation": "Affiliation", "crew": 1, "length": 1, "model": "Model", "ship_class": "Class", "roles": ["Role1", "Role2"], "category": "Category", "manufacturer": "Manufacturer"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 400
 
 
-def test_update_ship(client):
+def test_update_ship(client, auth):
+    auth.login()
     r = client.put("/api/ships/5", json={
         "id": 5, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 200
     assert r.is_json
     ship = r.get_json()
@@ -80,36 +82,40 @@ def test_update_ship(client):
     assert ship["ship_class"] == "?"
 
 
-def test_update_non_existing_ship(client):
+def test_update_non_existing_ship(client, auth):
+    auth.login()
     r = client.put("/api/ships/99", json={
         "id": 99, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 404
 
 
-def test_update_ship_ensures_request_data_id_matches_resource_id(client):
+def test_update_ship_ensures_request_data_id_matches_resource_id(client, auth):
     """If request data contains an (optional) "id" then it has to match the resource id."""
+    auth.login()
     r = client.put("/api/ships/5", json={
         "id": 5, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 200
     r = client.put("/api/ships/5", json={
         "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 200
     r = client.put("/api/ships/5", json={
         "id": 7, "affiliation": "?", "crew": 1, "length": 1, "model": "?", "ship_class": "?", "roles": ["?"], "category": "?", "manufacturer": "?"
-    }, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
+    }, headers=auth.headers)
     assert r.status_code == 400
     json = r.get_json()
     assert "message" in json
     assert json["message"] == "Request data id has to match resource id."
 
 
-def test_delete_ship(client):
-    assert client.delete("/api/ships/5", headers={"Authorization": "Bearer " + create_access_token(identity=1)}).status_code == 204
+def test_delete_ship(client, auth):
+    auth.login()
+    assert client.delete("/api/ships/5", headers=auth.headers).status_code == 204
 
 
-def test_delete_ship_that_does_not_exist(client):
-    assert client.delete("/api/ships/0", headers={"Authorization": "Bearer " + create_access_token(identity=1)}).status_code == 404
-    assert client.delete("/api/ships/99", headers={"Authorization": "Bearer " + create_access_token(identity=1)}).status_code == 404
+def test_delete_ship_that_does_not_exist(client, auth):
+    auth.login()
+    assert client.delete("/api/ships/0", headers=auth.headers).status_code == 404
+    assert client.delete("/api/ships/99", headers=auth.headers).status_code == 404
