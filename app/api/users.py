@@ -1,4 +1,5 @@
 from flask import jsonify, request, url_for
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from app.api import bp
 from app.models import user_schema
@@ -35,7 +36,10 @@ def create_user():
 
 
 @bp.route("/users/<int:id>", methods=["PUT"])
+@jwt_required
 def update_user(id):
+    if id != get_jwt_identity():
+        return error_response(403)
     try:
         user = user_schema.loads(request.data)
     except ValidationError as err:
@@ -55,7 +59,10 @@ def update_user(id):
 
 
 @bp.route("/users/<int:id>", methods=["DELETE"])
+@jwt_required
 def delete_user(id):
+    if id != get_jwt_identity():
+        return error_response(403)
     if db.get_user(id) is None:
         return error_response(404)
     if db.delete_user(id) is False:

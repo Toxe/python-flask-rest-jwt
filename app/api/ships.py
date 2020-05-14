@@ -1,4 +1,5 @@
 from flask import jsonify, request, url_for
+from flask_jwt_extended import jwt_required
 from app import db
 from app.api import bp
 from app.models import ship_schema
@@ -20,6 +21,7 @@ def get_ship(id):
 
 
 @bp.route("/ships", methods=["POST"])
+@jwt_required
 def create_ship():
     try:
         ship = ship_schema.loads(request.data)
@@ -35,6 +37,7 @@ def create_ship():
 
 
 @bp.route("/ships/<int:id>", methods=["PUT"])
+@jwt_required
 def update_ship(id):
     try:
         ship = ship_schema.loads(request.data)
@@ -55,6 +58,7 @@ def update_ship(id):
 
 
 @bp.route("/ships/<int:id>", methods=["DELETE"])
+@jwt_required
 def delete_ship(id):
     if db.get_ship(id) is None:
         return error_response(404)

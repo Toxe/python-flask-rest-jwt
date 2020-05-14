@@ -1,3 +1,6 @@
+from flask_jwt_extended import create_access_token
+
+
 def test_get_users(client):
     r = client.get("/api/users")
     assert r.status_code == 200
@@ -67,7 +70,7 @@ def test_create_user_fails_if_data_contains_id(client):
 
 
 def test_update_user(client):
-    r = client.put("/api/users/1", json={"id": 1, "name": "new-name", "password": "new-pwd"})
+    r = client.put("/api/users/1", json={"id": 1, "name": "new-name", "password": "new-pwd"}, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
     assert r.status_code == 200
     assert r.is_json
     user = r.get_json()
@@ -76,17 +79,17 @@ def test_update_user(client):
 
 
 def test_update_non_existing_user(client):
-    r = client.put("/api/users/99", json={"id": 99, "name": "?", "password": "?"})
+    r = client.put("/api/users/99", json={"id": 99, "name": "?", "password": "?"}, headers={"Authorization": "Bearer " + create_access_token(identity=99)})
     assert r.status_code == 404
 
 
 def test_update_user_ensures_request_data_id_matches_resource_id(client):
     """If request data contains an (optional) "id" then it has to match the resource id."""
-    r = client.put("/api/users/1", json={"id": 1, "name": "?", "password": "?"})
+    r = client.put("/api/users/1", json={"id": 1, "name": "?", "password": "?"}, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
     assert r.status_code == 200
-    r = client.put("/api/users/1", json={"name": "?", "password": "?"})
+    r = client.put("/api/users/1", json={"name": "?", "password": "?"}, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
     assert r.status_code == 200
-    r = client.put("/api/users/1", json={"id": 2, "name": "?", "password": "?"})
+    r = client.put("/api/users/1", json={"id": 2, "name": "?", "password": "?"}, headers={"Authorization": "Bearer " + create_access_token(identity=1)})
     assert r.status_code == 400
     json = r.get_json()
     assert "message" in json
@@ -94,9 +97,9 @@ def test_update_user_ensures_request_data_id_matches_resource_id(client):
 
 
 def test_delete_user(client):
-    assert client.delete("/api/users/2").status_code == 204
+    assert client.delete("/api/users/2", headers={"Authorization": "Bearer " + create_access_token(identity=2)}).status_code == 204
 
 
 def test_delete_user_that_does_not_exist(client):
-    assert client.delete("/api/users/0").status_code == 404
-    assert client.delete("/api/users/99").status_code == 404
+    assert client.delete("/api/users/0", headers={"Authorization": "Bearer " + create_access_token(identity=0)}).status_code == 404
+    assert client.delete("/api/users/99", headers={"Authorization": "Bearer " + create_access_token(identity=99)}).status_code == 404
