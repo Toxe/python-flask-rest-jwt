@@ -39,6 +39,12 @@ class Database:
             return None
         return lst[0]
 
+    def get_user_by_name(self, name):
+        lst = list(filter(lambda u: u.name == name, self.users))
+        if len(lst) != 1:
+            return None
+        return lst[0]
+
     def get_next_ship_id(self, ships):
         if len(ships) == 0:
             return 1

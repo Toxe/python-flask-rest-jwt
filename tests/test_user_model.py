@@ -20,6 +20,18 @@ def test_find_non_existing_user():
     assert user == None
 
 
+def test_find_existing_user_by_name():
+    user = db.get_user_by_name("guest")
+    assert user is not None
+    assert type(user) is User
+    assert user.id == 2
+
+
+def test_find_non_existing_user_by_name():
+    user = db.get_user_by_name("?")
+    assert user is None
+
+
 def test_get_next_user_id_from_populated_list():
     users = [
         User(id=3, name="user3", password="pwd3"),

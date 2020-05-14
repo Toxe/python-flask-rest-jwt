@@ -1,9 +1,10 @@
-# A (very) basic Flask REST API example
+# A (very) basic Flask REST API example using JWT Authentication
 
 ## Dependencies
 
 - Python 3
 - Flask
+- Flask-JWT-Extended
 - Marshmallow
 - python-dotenv
 - pylint-flask
