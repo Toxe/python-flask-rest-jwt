@@ -5,7 +5,7 @@ from flask_jwt_extended import (
     decode_token
 )
 from app import db
-from app.api import bp
+from app.auth import bp
 from app.errors import error_response
 
 

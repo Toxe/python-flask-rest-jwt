@@ -6,7 +6,7 @@ class Authentication:
     def __init__(self, client):
         self.client = client
     def login(self, id=1, username="user", password="password"):
-        r = self.client.post("/api/login", json={"username": username, "password": password})
+        r = self.client.post("/auth/login", json={"username": username, "password": password})
         if r.status_code != 200:
             raise RuntimeError("Login failed")
         self.id = id
