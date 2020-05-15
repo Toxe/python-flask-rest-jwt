@@ -1,6 +1,6 @@
 # A (very) basic Flask REST API example using JWT Authentication
 
-This is a simple Python REST API server using Flask and JWT. It **does not** use a database or other persistent storage, instead it reads its data on startup from `data.json` and provides some simple database functions for data manipulation and queries. All changes are lost on server shutdown.
+This is a simple Python REST API server using Flask and JWT (JSON Web Tokens). It **does not** use a database or other persistent storage, instead it reads its data on startup from `data.json` and provides some simple database functions for data manipulation and queries. All changes are lost on server shutdown.
 
 The JWT authentication supports access and refresh tokens.
 
@@ -85,7 +85,7 @@ python3 -m pytest
 
 ### Authentication
 
-#### `POST` `/auth/login`: Login
+##### `POST` `/auth/login`: Login
 
 ```
 $ curl -i http://localhost:5000/auth/login -X POST -d '{"username":"user", "password":"password"}' -H "Content-Type: application/json"
@@ -104,7 +104,7 @@ Date: Fri, 15 May 2020 12:56:25 GMT
 }
 ```
 
-#### `POST` `/auth/refresh`: Refresh access token
+##### `POST` `/auth/refresh`: Refresh access token
 
 ```
 $ curl -i http://localhost:5000/auth/refresh -X POST -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDczODUsIm5iZiI6MTU4OTU0NzM4NSwianRpIjoiMmFhZDQxNTEtMDFmNi00YzM4LWFiYjctZWE2M2YyYjhlMjE3IiwiZXhwIjoxNTkyMTM5Mzg1LCJpZGVudGl0eSI6MSwidHlwZSI6InJlZnJlc2gifQ.SazEtt-odtprlo2eD8XiE90chQm87PfYt7UyMj5rvVk"
@@ -124,7 +124,7 @@ Date: Fri, 15 May 2020 12:57:56 GMT
 
 ### Users
 
-#### `GET` `/api/users`: List all users
+##### `GET` `/api/users`: List all users
 
 This will not return stored passwords.
 
@@ -151,7 +151,7 @@ Date: Fri, 15 May 2020 12:58:30 GMT
 ]
 ```
 
-#### `GET` `/api/users/<id>`: Query single user
+##### `GET` `/api/users/<id>`: Query single user
 
 This will not return the user password.
 
@@ -172,7 +172,7 @@ Date: Fri, 15 May 2020 12:58:52 GMT
 }
 ```
 
-#### `POST` `/api/users`: Create new user
+##### `POST` `/api/users`: Create new user
 
 ```
 $ curl -i http://localhost:5000/api/users -X POST -d '{"name":"new user", "password":"secret"}' -H "Content-Type: application/json"
@@ -192,7 +192,7 @@ Date: Fri, 15 May 2020 12:59:19 GMT
 }
 ```
 
-#### `PUT` `/api/users/<id>`: Update user data
+##### `PUT` `/api/users/<id>`: Update user data
 
 Login required and can only change own data.
 
@@ -213,7 +213,7 @@ Date: Fri, 15 May 2020 13:02:09 GMT
 }
 ```
 
-#### `DELETE` `/api/users/<id>`: Delete user
+##### `DELETE` `/api/users/<id>`: Delete user
 
 Login required and can only delete the current user.
 
@@ -230,7 +230,7 @@ Date: Fri, 15 May 2020 13:02:30 GMT
 
 ### Ships
 
-#### `GET` `/api/ships`: List all ships
+##### `GET` `/api/ships`: List all ships
 
 ```
 $ curl -i http://localhost:5000/api/ships
@@ -275,7 +275,7 @@ Date: Fri, 15 May 2020 13:03:08 GMT
 ]
 ```
 
-#### `GET` `/api/ship/<id>`: Query single ship
+##### `GET` `/api/ship/<id>`: Query single ship
 
 ```
 $ curl -i http://localhost:5000/api/ships/2
@@ -303,7 +303,7 @@ Date: Fri, 15 May 2020 13:06:32 GMT
 }
 ```
 
-#### `POST` `/api/ship`: Create new ship
+##### `POST` `/api/ship`: Create new ship
 
 Login required.
 
@@ -337,7 +337,7 @@ Date: Fri, 15 May 2020 13:07:38 GMT
 }
 ```
 
-#### `PUT` `/api/ship/<id>`: Update ship
+##### `PUT` `/api/ship/<id>`: Update ship
 
 Login required.
 
@@ -370,7 +370,7 @@ Date: Fri, 15 May 2020 13:07:56 GMT
 }
 ```
 
-#### `DELETE` `/api/ship/<id>`: Delete ship
+##### `DELETE` `/api/ship/<id>`: Delete ship
 
 Login required.
 
