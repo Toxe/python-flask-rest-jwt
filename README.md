@@ -88,25 +88,37 @@ python3 -m pytest
 #### `POST` `/auth/login`: Login
 
 ```
-$ curl http://localhost:5000/auth/login -X POST -d '{"username":"user", "password":"password"}' -H "Content-Type: application/json"
+$ curl -i http://localhost:5000/auth/login -X POST -d '{"username":"user", "password":"password"}' -H "Content-Type: application/json"
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 568
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 12:56:25 GMT
+
 {
-  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1MzgwMjYsIm5iZiI6MTU4OTUzODAyNiwianRpIjoiNTM5YzY2ZDUtZWI1My00YzBkLTk4N2MtYzg4OTg2ZDUwZDY1IiwiZXhwIjoxNTg5NTM4OTI2LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.SGZW44ceJxwAA5YNcqblkUxDvwZdk0BK9V4ITWedGAs",
-  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1Mzg0NzMsIm5iZiI6MTU4OTUzODQ3MywianRpIjoiZDE0YmY3Y2MtYjBmMi00N2JlLThjMjktNDcwY2RiYTQ2YzQ4IiwiZXhwIjoxNTkyMTMwNDczLCJpZGVudGl0eSI6MSwidHlwZSI6InJlZnJlc2gifQ.k2-uByI7RbIDTz2sWPhK05oxgfPrr-WVO91osWFpb5A"
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDczODUsIm5iZiI6MTU4OTU0NzM4NSwianRpIjoiMDE5NmJkMjAtZGMxOC00NTI0LWEzM2UtNWEzYTZiNGMxZTQ2IiwiZXhwIjoxNTg5NTQ4Mjg1LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.7Jeg7_Yv22vzKAM6ZfOgp5JQjEGAJLWB_k6qDpfx5HU",
+  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDczODUsIm5iZiI6MTU4OTU0NzM4NSwianRpIjoiMmFhZDQxNTEtMDFmNi00YzM4LWFiYjctZWE2M2YyYjhlMjE3IiwiZXhwIjoxNTkyMTM5Mzg1LCJpZGVudGl0eSI6MSwidHlwZSI6InJlZnJlc2gifQ.SazEtt-odtprlo2eD8XiE90chQm87PfYt7UyMj5rvVk"
 }
 ```
 
 #### `POST` `/auth/refresh`: Refresh access token
 
 ```
-$ curl http://localhost:5000/auth/refresh -X POST -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1Mzg0NzMsIm5iZiI6MTU4OTUzODQ3MywianRpIjoiZDE0YmY3Y2MtYjBmMi00N2JlLThjMjktNDcwY2RiYTQ2YzQ4IiwiZXhwIjoxNTkyMTMwNDczLCJpZGVudGl0eSI6MSwidHlwZSI6InJlZnJlc2gifQ.k2-uByI7RbIDTz2sWPhK05oxgfPrr-WVO91osWFpb5A"
+$ curl -i http://localhost:5000/auth/refresh -X POST -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDczODUsIm5iZiI6MTU4OTU0NzM4NSwianRpIjoiMmFhZDQxNTEtMDFmNi00YzM4LWFiYjctZWE2M2YyYjhlMjE3IiwiZXhwIjoxNTkyMTM5Mzg1LCJpZGVudGl0eSI6MSwidHlwZSI6InJlZnJlc2gifQ.SazEtt-odtprlo2eD8XiE90chQm87PfYt7UyMj5rvVk"
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 293
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 12:57:56 GMT
+
 {
-  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1Mzg3NTQsIm5iZiI6MTU4OTUzODc1NCwianRpIjoiOGU4N2I2NWItZTIyOC00ZTk3LWJkZjMtNjZlZDBlYjIzOTllIiwiZXhwIjoxNTg5NTM5NjU0LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.pp85jfsbu5LtMlBaMEtrUcFZtgAdu0Vm_WaNsDPUQ-0"
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDc0NzYsIm5iZiI6MTU4OTU0NzQ3NiwianRpIjoiNWE1Mzg0MGUtYjZmNS00ZTFkLTg3MGMtYzViNDliYmVkOGQzIiwiZXhwIjoxNTg5NTQ4Mzc2LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.4j4jonxmnAP1hFkJSCryIkKWOrMtJU02BqUIBUukpKA"
 }
 ```
 
@@ -114,13 +126,19 @@ $ curl http://localhost:5000/auth/refresh -X POST -H "Authorization: Bearer eyJ0
 
 #### `GET` `/api/users`: List all users
 
-This will note return stored passwords.
+This will not return stored passwords.
 
 ```
-$ curl http://localhost:5000/api/users
+$ curl -i http://localhost:5000/api/users
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 89
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 12:58:30 GMT
+
 [
   {
     "id": 1,
@@ -138,10 +156,16 @@ $ curl http://localhost:5000/api/users
 This will not return the user password.
 
 ```
-$ curl http://localhost:5000/api/users/1
+$ curl -i http://localhost:5000/api/users/1
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 33
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 12:58:52 GMT
+
 {
   "id": 1,
   "name": "user"
@@ -151,10 +175,17 @@ $ curl http://localhost:5000/api/users/1
 #### `POST` `/api/users`: Create new user
 
 ```
-$ curl http://localhost:5000/api/users -X POST -d '{"name":"new user", "password":"secret"}' -H "Content-Type: application/json"
+$ curl -i http://localhost:5000/api/users -X POST -d '{"name":"new user", "password":"secret"}' -H "Content-Type: application/json"
 ```
 
 ```
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 37
+Location: http://localhost:5000/api/users/3
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 12:59:19 GMT
+
 {
   "id": 3,
   "name": "new user"
@@ -166,10 +197,16 @@ $ curl http://localhost:5000/api/users -X POST -d '{"name":"new user", "password
 Login required and can only change own data.
 
 ```
-$ curl http://localhost:5000/api/users/3 -X PUT -d '{"name":"fancy new name", "password":"more secret"}' -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1Mzk1NjUsIm5iZiI6MTU4OTUzOTU2NSwianRpIjoiOTg4MzgzM2UtYTA2Yi00OWVjLTlmNDYtMWY3OGFkMzJhOTdhIiwiZXhwIjoxNTg5NTQwNDY1LCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0._5zSHBsN1jUvaLxkSaC1lW6aRemm_1fGvp-Nufb2028"
+$ curl -i http://localhost:5000/api/users/3 -X PUT -d '{"name":"fancy new name", "password":"more secret"}' -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDc3MDYsIm5iZiI6MTU4OTU0NzcwNiwianRpIjoiOTJjYTdhMTItY2Q4Yi00ZWJjLThlMWEtMjU1N2EwMGYwY2Y0IiwiZXhwIjoxNTg5NTQ4NjA2LCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.FLFRjkTAzpeT-ZOUsZmWegy5cn-EHM8EeC3Tskuu4Uc"
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 43
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 13:02:09 GMT
+
 {
   "id": 3,
   "name": "fancy new name"
@@ -181,7 +218,14 @@ $ curl http://localhost:5000/api/users/3 -X PUT -d '{"name":"fancy new name", "p
 Login required and can only delete the current user.
 
 ```
-$ curl http://localhost:5000/api/users/3 -X DELETE -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1Mzk1NjUsIm5iZiI6MTU4OTUzOTU2NSwianRpIjoiOTg4MzgzM2UtYTA2Yi00OWVjLTlmNDYtMWY3OGFkMzJhOTdhIiwiZXhwIjoxNTg5NTQwNDY1LCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0._5zSHBsN1jUvaLxkSaC1lW6aRemm_1fGvp-Nufb2028"
+$ curl -i http://localhost:5000/api/users/3 -X DELETE -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDc3MDYsIm5iZiI6MTU4OTU0NzcwNiwianRpIjoiOTJjYTdhMTItY2Q4Yi00ZWJjLThlMWEtMjU1N2EwMGYwY2Y0IiwiZXhwIjoxNTg5NTQ4NjA2LCJpZGVudGl0eSI6MywiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.FLFRjkTAzpeT-ZOUsZmWegy5cn-EHM8EeC3Tskuu4Uc"
+```
+
+```
+HTTP/1.0 204 NO CONTENT
+Content-Type: text/html; charset=utf-8
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 13:02:30 GMT
 ```
 
 ### Ships
@@ -189,10 +233,16 @@ $ curl http://localhost:5000/api/users/3 -X DELETE -H "Authorization: Bearer eyJ
 #### `GET` `/api/ships`: List all ships
 
 ```
-$ curl http://localhost:5000/api/ships
+$ curl -i http://localhost:5000/api/ships
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 4984
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 13:03:08 GMT
+
 [
   {
     "affiliation": "Rebel Alliance",
@@ -208,16 +258,36 @@ $ curl http://localhost:5000/api/ships
     ],
     "ship_class": "Starfighter"
   },
-  [...]
+  {"id": 2, ...},
+  {"id": 3, ...},
+  {"id": 4, ...},
+  {"id": 5, ...},
+  {"id": 6, ...},
+  {"id": 7, ...},
+  {"id": 8, ...},
+  {"id": 9, ...},
+  {"id": 10, ...},
+  {"id": 11, ...},
+  {"id": 12, ...},
+  {"id": 13, ...},
+  {"id": 14, ...},
+  {"id": 15, ...}
+]
 ```
 
 #### `GET` `/api/ship/<id>`: Query single ship
 
 ```
-$ curl http://localhost:5000/api/ships/2
+$ curl -i http://localhost:5000/api/ships/2
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 267
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 13:06:32 GMT
+
 {
   "affiliation": "Empire",
   "category": "Starfighters",
@@ -238,10 +308,17 @@ $ curl http://localhost:5000/api/ships/2
 Login required.
 
 ```
-$ curl http://localhost:5000/api/ships -X POST -d '{"ship_class":"Star Destroyer", "model":"Imperial I-class Star Destroyer", "affiliation":"Empire", "category":"Capital Ships", "crew":37085, "length":1600, "manufacturer":"Kuat Drive Yards", "roles":["Destroyer","Carrier","Military Transport","Command Ship"]}' -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDY2NzEsIm5iZiI6MTU4OTU0NjY3MSwianRpIjoiMzhiOWZlZjUtMDEwOC00ODljLTljNjYtY2Q2YzZkMGViNWI3IiwiZXhwIjoxNTg5NTQ3NTcxLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.rbCRtuhRN4__IuR7WvYMQY5Q6goxm6PyIHcz0xE-8DQ"
+$ curl -i http://localhost:5000/api/ships -X POST -d '{"ship_class":"Star Destroyer", "model":"Imperial I-class Star Destroyer", "affiliation":"Empire", "category":"Capital Ships", "crew":37085, "length":1600, "manufacturer":"Kuat Drive Yards", "roles":["Destroyer","Carrier","Military Transport","Command Ship"]}' -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDc0NzYsIm5iZiI6MTU4OTU0NzQ3NiwianRpIjoiNWE1Mzg0MGUtYjZmNS00ZTFkLTg3MGMtYzViNDliYmVkOGQzIiwiZXhwIjoxNTg5NTQ4Mzc2LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.4j4jonxmnAP1hFkJSCryIkKWOrMtJU02BqUIBUukpKA"
 ```
 
 ```
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 332
+Location: http://localhost:5000/api/ships/16
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 13:07:38 GMT
+
 {
   "affiliation": "Empire",
   "category": "Capital Ships",
@@ -265,10 +342,16 @@ $ curl http://localhost:5000/api/ships -X POST -d '{"ship_class":"Star Destroyer
 Login required.
 
 ```
-$ curl http://localhost:5000/api/ships/16 -X PUT -d '{"ship_class":"Star Destroyer", "model":"Imperial II-class Star Destroyer", "affiliation":"Empire", "category":"Capital Ships", "crew":37050, "length":1600, "manufacturer":"Kuat Drive Yards", "roles":["Destroyer","Carrier","Military Transport","Command Ship"]}' -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDY2NzEsIm5iZiI6MTU4OTU0NjY3MSwianRpIjoiMzhiOWZlZjUtMDEwOC00ODljLTljNjYtY2Q2YzZkMGViNWI3IiwiZXhwIjoxNTg5NTQ3NTcxLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.rbCRtuhRN4__IuR7WvYMQY5Q6goxm6PyIHcz0xE-8DQ"
+$ curl -i http://localhost:5000/api/ships/16 -X PUT -d '{"ship_class":"Star Destroyer", "model":"Imperial II-class Star Destroyer", "affiliation":"Empire", "category":"Capital Ships", "crew":37050, "length":1600, "manufacturer":"Kuat Drive Yards", "roles":["Destroyer","Carrier","Military Transport","Command Ship"]}' -H "Content-Type: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDc0NzYsIm5iZiI6MTU4OTU0NzQ3NiwianRpIjoiNWE1Mzg0MGUtYjZmNS00ZTFkLTg3MGMtYzViNDliYmVkOGQzIiwiZXhwIjoxNTg5NTQ4Mzc2LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.4j4jonxmnAP1hFkJSCryIkKWOrMtJU02BqUIBUukpKA"
 ```
 
 ```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 333
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Fri, 15 May 2020 13:07:56 GMT
+
 {
   "affiliation": "Empire",
   "category": "Capital Ships",
@@ -292,12 +375,12 @@ $ curl http://localhost:5000/api/ships/16 -X PUT -d '{"ship_class":"Star Destroy
 Login required.
 
 ```
-$ curl -i http://localhost:5000/api/ships/16 -X DELETE -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDY2NzEsIm5iZiI6MTU4OTU0NjY3MSwianRpIjoiMzhiOWZlZjUtMDEwOC00ODljLTljNjYtY2Q2YzZkMGViNWI3IiwiZXhwIjoxNTg5NTQ3NTcxLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.rbCRtuhRN4__IuR7WvYMQY5Q6goxm6PyIHcz0xE-8DQ"
+$ curl -i -i http://localhost:5000/api/ships/16 -X DELETE -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDc0NzYsIm5iZiI6MTU4OTU0NzQ3NiwianRpIjoiNWE1Mzg0MGUtYjZmNS00ZTFkLTg3MGMtYzViNDliYmVkOGQzIiwiZXhwIjoxNTg5NTQ4Mzc2LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.4j4jonxmnAP1hFkJSCryIkKWOrMtJU02BqUIBUukpKA"
 ```
 
 ```
 HTTP/1.0 204 NO CONTENT
 Content-Type: text/html; charset=utf-8
 Server: Werkzeug/1.0.1 Python/3.8.2
-Date: Fri, 15 May 2020 12:52:05 GMT
+Date: Fri, 15 May 2020 13:08:25 GMT
 ```
