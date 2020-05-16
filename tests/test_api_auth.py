@@ -51,11 +51,10 @@ def test_login_with_wrong_password(client):
     assert "access_token" not in data
 
 
-def test_refresh_token(client):
-    r = client.post("/auth/login", json={"username": "user", "password": "password"})
-    refresh_token = r.get_json().get("refresh_token")
-    old_access_token = r.get_json().get("access_token")
-    r = client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(refresh_token)})
+def test_refresh_token(client, auth):
+    auth.login()
+    old_access_token = auth.access_token
+    r = client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(auth.refresh_token)})
     assert r.status_code == 200
     assert r.is_json
     access_token = r.get_json().get("access_token")
@@ -65,28 +64,23 @@ def test_refresh_token(client):
     assert token_data.get("identity") == 1
 
 
-def test_cannot_call_refresh_for_unknown_user(client):
-    r = client.post("/auth/login", json={"username": "user", "password": "password"})
-    access_token = r.get_json().get("access_token")
-    refresh_token = r.get_json().get("refresh_token")
-    user_id = decode_token(access_token).get("identity")
-    assert client.delete("/api/users/{}".format(user_id), headers={"Authorization": "Bearer {}".format(access_token)}).status_code == 204
-    assert client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(refresh_token)}).status_code == 401
+def test_cannot_call_refresh_for_unknown_user(client, auth):
+    auth.login()
+    assert client.delete("/api/users/{}".format(auth.id), headers={"Authorization": "Bearer {}".format(auth.access_token)}).status_code == 204
+    assert client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(auth.refresh_token)}).status_code == 401
 
 
-def test_cannot_call_refresh_with_access_token(client):
-    r = client.post("/auth/login", json={"username": "user", "password": "password"})
-    access_token = r.get_json().get("access_token")
-    r = client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(access_token)})
+def test_cannot_call_refresh_with_access_token(client, auth):
+    auth.login()
+    r = client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(auth.access_token)})
     assert r.status_code == 422
     assert r.is_json
     assert r.get_json().get("error") == "Only refresh tokens are allowed"
 
 
-def test_cannot_call_protected_api_with_refresh_token(client):
-    r = client.post("/auth/login", json={"username": "user", "password": "password"})
-    refresh_token = r.get_json().get("refresh_token")
-    r = client.delete("/api/ships/1", headers={"Authorization": "Bearer {}".format(refresh_token)})
+def test_cannot_call_protected_api_with_refresh_token(client, auth):
+    auth.login()
+    r = client.delete("/api/ships/1", headers={"Authorization": "Bearer {}".format(auth.refresh_token)})
     assert r.status_code == 422
     assert r.is_json
     assert r.get_json().get("error") == "Only access tokens are allowed"
