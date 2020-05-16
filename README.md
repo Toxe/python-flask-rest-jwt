@@ -2,7 +2,7 @@
 
 This is a simple Python REST API server using Flask and JWT (JSON Web Tokens). It **does not** use a database or other persistent storage, instead it reads its data on startup from `data.json` and provides some simple database functions for data manipulation and queries. All changes are lost on server shutdown.
 
-The JWT authentication supports access and refresh tokens.
+The JWT authentication supports access and refresh tokens and token revoking by using an in-memory blacklist.
 
 ## Dependencies
 
@@ -46,21 +46,23 @@ Example user and ship data is stored in `data.json`.
 
 ```
 $ flask routes --sort rule
-Endpoint         Methods  Rule
----------------  -------  -----------------------
-api.get_ships    GET      /api/ships
-api.create_ship  POST     /api/ships
-api.get_ship     GET      /api/ships/<int:id>
-api.update_ship  PUT      /api/ships/<int:id>
-api.delete_ship  DELETE   /api/ships/<int:id>
-api.get_users    GET      /api/users
-api.create_user  POST     /api/users
-api.get_user     GET      /api/users/<int:id>
-api.update_user  PUT      /api/users/<int:id>
-api.delete_user  DELETE   /api/users/<int:id>
-auth.login       POST     /auth/login
-auth.refresh     POST     /auth/refresh
-static           GET      /static/<path:filename>
+Endpoint                   Methods  Rule
+-------------------------  -------  -----------------------
+api.get_ships              GET      /api/ships
+api.create_ship            POST     /api/ships
+api.get_ship               GET      /api/ships/<int:id>
+api.update_ship            PUT      /api/ships/<int:id>
+api.delete_ship            DELETE   /api/ships/<int:id>
+api.get_users              GET      /api/users
+api.create_user            POST     /api/users
+api.get_user               GET      /api/users/<int:id>
+api.update_user            PUT      /api/users/<int:id>
+api.delete_user            DELETE   /api/users/<int:id>
+auth.login                 POST     /auth/login
+auth.logout_access_token   DELETE   /auth/logout
+auth.logout_refresh_token  DELETE   /auth/logout2
+auth.refresh               POST     /auth/refresh
+static                     GET      /static/<path:filename>
 ```
 
 ## Running (development version)
@@ -119,6 +121,42 @@ Date: Fri, 15 May 2020 12:57:56 GMT
 
 {
   "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk1NDc0NzYsIm5iZiI6MTU4OTU0NzQ3NiwianRpIjoiNWE1Mzg0MGUtYjZmNS00ZTFkLTg3MGMtYzViNDliYmVkOGQzIiwiZXhwIjoxNTg5NTQ4Mzc2LCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.4j4jonxmnAP1hFkJSCryIkKWOrMtJU02BqUIBUukpKA"
+}
+```
+
+##### `DELETE` `/auth/logout`: Logout and revoke access token
+
+```
+$ curl -i http://localhost:5000/auth/logout -X DELETE -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk2MTc4NzIsIm5iZiI6MTU4OTYxNzg3MiwianRpIjoiYzUwNDlkMmEtZWIyZS00M2I1LWIzNjgtMTJjYWFiMjA3ZTJjIiwiZXhwIjoxNTg5NjE4NzcyLCJpZGVudGl0eSI6MSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.XoQtFc-a9ak4ON8TQ6rKYzz8IZWlYCeTZph4fomX-tw"
+```
+
+```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 44
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Sat, 16 May 2020 08:32:18 GMT
+
+{
+  "message": "Successfully logged out."
+}
+```
+
+##### `DELETE` `/auth/logout2`: Logout and revoke refresh token
+
+```
+$ curl -i http://localhost:5000/auth/logout2 -X DELETE -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODk2MTc4NzIsIm5iZiI6MTU4OTYxNzg3MiwianRpIjoiYzA2YTA2NWEtMmJiYS00ZTJlLTliZTctY2Y0YWM4MWUwZDA2IiwiZXhwIjoxNTkyMjA5ODcyLCJpZGVudGl0eSI6MSwidHlwZSI6InJlZnJlc2gifQ.XsZ1cHcFhA60k4z87-bbuHBkRmWD6hKAXifzFq2NjOw"
+```
+
+```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 44
+Server: Werkzeug/1.0.1 Python/3.8.2
+Date: Sat, 16 May 2020 08:34:18 GMT
+
+{
+  "message": "Successfully logged out."
 }
 ```
 
