@@ -90,3 +90,34 @@ def test_cannot_call_protected_api_with_refresh_token(client):
     assert r.status_code == 422
     assert r.is_json
     assert r.get_json().get("error") == "Only access tokens are allowed"
+
+
+def test_logout_access_token(client, auth):
+    auth.login()
+    # logout and blacklist access token
+    r = client.delete("/auth/logout", headers={"Authorization": "Bearer {}".format(auth.access_token)})
+    assert r.status_code == 200
+    assert r.is_json
+    assert r.get_json().get("message") == "Successfully logged out."
+    # no longer logged in
+    r = client.delete("/api/ships/1", headers={"Authorization": "Bearer {}".format(auth.access_token)})
+    assert r.status_code == 401
+    assert r.is_json
+    assert r.get_json().get("error") == "Token has been revoked"
+    # request new access token
+    r = client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(auth.refresh_token)})
+    assert r.status_code == 200
+
+
+def test_logout_refresh_token(client, auth):
+    auth.login()
+    # logout refresh token
+    r = client.delete("/auth/logout2", headers={"Authorization": "Bearer {}".format(auth.refresh_token)})
+    assert r.status_code == 200
+    assert r.is_json
+    assert r.get_json().get("message") == "Successfully logged out."
+    # cannot request new access token
+    r = client.post("/auth/refresh", headers={"Authorization": "Bearer {}".format(auth.refresh_token)})
+    assert r.status_code == 401
+    assert r.is_json
+    assert r.get_json().get("error") == "Token has been revoked"

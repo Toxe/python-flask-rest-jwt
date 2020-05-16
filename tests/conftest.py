@@ -11,6 +11,7 @@ class Authentication:
             raise RuntimeError("Login failed")
         self.id = id
         self.access_token = r.get_json().get("access_token")
+        self.refresh_token = r.get_json().get("refresh_token")
         self.headers = {"Authorization": "Bearer {}".format(self.access_token)}
 
 

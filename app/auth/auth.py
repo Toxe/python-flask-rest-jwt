@@ -1,12 +1,20 @@
 from flask import jsonify, request
 from flask_jwt_extended import (
     create_access_token, create_refresh_token,
-    jwt_refresh_token_required, get_jwt_identity,
-    decode_token
+    jwt_required, jwt_refresh_token_required,
+    get_jwt_identity, get_raw_jwt
 )
-from app import db
+from app import db, jwt
 from app.auth import bp
 from app.errors import error_response
+
+
+blacklist = set()
+
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    return decrypted_token["jti"] in blacklist
 
 
 @bp.route("/login", methods=["POST"])
@@ -39,3 +47,19 @@ def refresh():
         return error_response(401, "Unknown user.")
     access_token = create_access_token(identity=user.id)
     return jsonify(access_token=access_token)
+
+
+# revoke current access token
+@bp.route("/logout", methods=["DELETE"])
+@jwt_required
+def logout_access_token():
+    blacklist.add(get_raw_jwt()["jti"])
+    return jsonify(message="Successfully logged out.")
+
+
+# revoke current refresh token
+@bp.route("/logout2", methods=["DELETE"])
+@jwt_refresh_token_required
+def logout_refresh_token():
+    blacklist.add(get_raw_jwt()["jti"])
+    return jsonify(message="Successfully logged out.")
