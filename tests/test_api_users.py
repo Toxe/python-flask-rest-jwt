@@ -42,7 +42,7 @@ def test_create_user(client):
     assert r.headers["Location"].endswith("/api/users/{}".format(user["id"]))
 
 
-def test_create_user_fails_if_data_is_missing(client):
+def test_create_user_fails_if_required_field_is_missing(client):
     r = client.post("/api/users", json={"name": "user"})
     assert r.status_code == 400
     assert r.is_json
