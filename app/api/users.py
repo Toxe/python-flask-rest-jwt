@@ -26,6 +26,8 @@ def create_user():
         user = user_schema.loads(request.data)
     except ValidationError as err:
         return error_response(400, err.messages)
+    if db.get_user_by_name(user.name):
+        return error_response(400, "User already exists.")
     user = db.add_user(user)
     if user is None:
         return error_response(400)

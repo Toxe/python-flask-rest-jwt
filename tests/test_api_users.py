@@ -81,6 +81,13 @@ def test_create_user_fails_if_data_contains_id(client):
     assert r.status_code == 400
 
 
+def test_create_user_fails_if_username_is_already_taken(client):
+    client.post("/api/users", json={"name": "already-taken", "password": "????"}).status_code == 201
+    r = client.post("/api/users", json={"name": "already-taken", "password": "????"})
+    assert r.status_code == 400
+    assert r.get_json().get("message") == "User already exists."
+
+
 def test_update_user(client, auth):
     auth.login()
     r = client.put("/api/users/{}".format(auth.id), headers=auth.headers, json={"id": auth.id, "name": "new-name", "password": "new-pwd"})

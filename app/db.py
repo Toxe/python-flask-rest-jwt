@@ -65,6 +65,8 @@ class Database:
     def add_user(self, user):
         if user is None or user.id != 0:
             return None
+        if self.get_user_by_name(user.name):
+            return None
         user.id = self.get_next_user_id(self.users)
         self.users.append(user)
         return user

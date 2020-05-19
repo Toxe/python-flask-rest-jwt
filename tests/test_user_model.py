@@ -46,13 +46,18 @@ def test_get_next_user_id_from_empty_list(app):
 
 
 def test_add_user(app):
-    user = User(id=0, name="user", password="pwd")
+    user = User(id=0, name="new-user", password="pwd")
     user = db.add_user(user)
     assert user.id > 0
 
 
+def test_add_user_checks_if_username_is_already_taken(app):
+    assert db.add_user(User(id=0, name="already-taken", password="pwd")) is not None
+    assert db.add_user(User(id=0, name="already-taken", password="pwd")) is None
+
+
 def test_add_user_with_nonzero_id(app):
-    user = User(id=20, name="user", password="pwd")
+    user = User(id=20, name="new-user", password="pwd")
     assert db.add_user(user) == None
 
 
