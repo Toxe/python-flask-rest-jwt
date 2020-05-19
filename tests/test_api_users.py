@@ -52,6 +52,18 @@ def test_create_user_fails_if_required_field_is_missing(client):
     assert user["message"]["password"][0] == "Missing data for required field."
 
 
+def test_create_user_fails_if_input_fields_are_too_short(client):
+    r = client.post("/api/users", json={"name": "?", "password": "?"})
+    assert r.status_code == 400
+    assert r.is_json
+    data = r.get_json()
+    assert "message" in data
+    assert "name" in data["message"]
+    assert "password" in data["message"]
+    assert data["message"]["name"][0] == "Shorter than minimum length 2."
+    assert data["message"]["password"][0] == "Shorter than minimum length 4."
+
+
 def test_create_user_fails_if_data_is_of_wrong_type(client):
     r = client.post("/api/users", json={"name": -1, "password": False})
     assert r.status_code == 400
@@ -65,7 +77,7 @@ def test_create_user_fails_if_data_is_of_wrong_type(client):
 
 
 def test_create_user_fails_if_data_contains_id(client):
-    r = client.post("/api/users", json={"id": 1, "name": "?", "password": "?"})
+    r = client.post("/api/users", json={"id": 1, "name": "??", "password": "????"})
     assert r.status_code == 400
 
 
@@ -84,16 +96,16 @@ def test_update_user_without_login(client):
 
 
 def test_update_non_existing_user(client):
-    r = client.put("/api/users/99", json={"id": 99, "name": "?", "password": "?"}, headers={"Authorization": "Bearer " + create_access_token(identity=99)})
+    r = client.put("/api/users/99", json={"id": 99, "name": "??", "password": "????"}, headers={"Authorization": "Bearer " + create_access_token(identity=99)})
     assert r.status_code == 404
 
 
 def test_update_user_ensures_request_data_id_matches_resource_id(client, auth):
     """If request data contains an (optional) "id" then it has to match the resource id."""
     auth.login()
-    assert client.put("/api/users/{}".format(auth.id), headers=auth.headers, json={"id": auth.id, "name": "?", "password": "?"}).status_code == 200
-    assert client.put("/api/users/{}".format(auth.id), headers=auth.headers, json={"name": "?", "password": "?"}).status_code == 200
-    r = client.put("/api/users/{}".format(auth.id), headers=auth.headers, json={"id": auth.id + 1, "name": "?", "password": "?"})
+    assert client.put("/api/users/{}".format(auth.id), headers=auth.headers, json={"id": auth.id, "name": "??", "password": "????"}).status_code == 200
+    assert client.put("/api/users/{}".format(auth.id), headers=auth.headers, json={"name": "??", "password": "????"}).status_code == 200
+    r = client.put("/api/users/{}".format(auth.id), headers=auth.headers, json={"id": auth.id + 1, "name": "??", "password": "????"})
     assert r.status_code == 400
     json = r.get_json()
     assert "message" in json
