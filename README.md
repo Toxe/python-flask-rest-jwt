@@ -7,12 +7,14 @@ The JWT authentication supports access and refresh tokens and token revoking by 
 ## Dependencies
 
 - Python 3
-- Flask
-- Flask-JWT-Extended
-- Marshmallow
-- python-dotenv
-- pylint-flask
-- pytest
+- [Poetry](https://python-poetry.org)
+
+## Setup Virtual Environment and install Dependencies
+
+```
+$ poetry install
+$ poetry shell
+```
 
 ## Configuration
 
